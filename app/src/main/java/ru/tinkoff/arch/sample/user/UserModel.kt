@@ -14,8 +14,8 @@ class UserModel (private val userService: UserService) {
     // MutableLiveData имеет методы getValue, setValue, observe, observeForever
     // LiveData имеет методы getValue, observe, observeForever
     // наружу видно только LiveData и никто "снаружу" в других классах не сможет установить значение. Только получить.
-    private val mutableLoginState = MutableLiveData<Either<Boolean, Throwable>>()
-    val loginState : LiveData<Either<Boolean, Throwable>> = mutableLoginState
+    private val mutableLoginState = MutableLiveData<SignInResult>()
+    val loginState : LiveData<SignInResult> = mutableLoginState
 
     fun signin(email: String, password: String) {
         userService.signin(SignInBody(email, password)).enqueue(object : Callback<Void> {
@@ -29,3 +29,6 @@ class UserModel (private val userService: UserService) {
         })
     }
 }
+
+// Чтобы не писать каждый раз Either<Boolean, Throwable>
+typealias SignInResult = Either<Boolean, Throwable>
